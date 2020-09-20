@@ -235,6 +235,13 @@ do_flash() {
         echo "Flashing with IMAGE_OFFSET: ${IMAGE_OFFSET}"
     fi
 
+    # Added for building in MSYS
+    if [ -n "${MSYSTEM}" ]; then
+        MSYS_PATH=$( cd / && pwd -W )
+        IMAGE_FILE=${MSYS_PATH}${IMAGE_FILE}
+        IMAGE_FILE=${IMAGE_FILE//\//\\\\} # replace Unix-style slashes with Windows
+    fi
+
     # flash device
     sh -c "${OPENOCD} \
             ${OPENOCD_ADAPTER_INIT} \
