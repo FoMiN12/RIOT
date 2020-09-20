@@ -2,3 +2,9 @@ OFLAGS = -O ihex
 
 USEMODULE += boards_common_unwd
 INCLUDES  += -I$(RIOTBOARD)/common/unwd/include
+
+# Unwired Devices provide a DAP-compatible debug adapter, supported by OpenOCD
+export DEBUG_ADAPTER ?= dap
+
+# Unwired Devices boards use openocd
+include $(RIOTMAKE)/tools/openocd.inc.mk
