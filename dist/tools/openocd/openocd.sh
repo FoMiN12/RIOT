@@ -74,7 +74,11 @@
 # Debugger interface initialization commands to pass to OpenOCD
 : ${OPENOCD_ADAPTER_INIT:=}
 # The setsid command is needed so that Ctrl+C in GDB doesn't kill OpenOCD
+if [ -n "${MSYSTEM}" ]; then
+: ${SETSID:=}
+else
 : ${SETSID:=setsid}
+fi
 # GDB command, usually a separate command for each platform (e.g. arm-none-eabi-gdb)
 : ${GDB:=gdb}
 # Debugger client command, can be used to wrap GDB in a front-end

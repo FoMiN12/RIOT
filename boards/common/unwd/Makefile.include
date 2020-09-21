@@ -5,6 +5,7 @@ INCLUDES  += -I$(RIOTBOARD)/common/unwd/include
 
 # Unwired Devices provide a DAP-compatible debug adapter, supported by OpenOCD
 export DEBUG_ADAPTER ?= dap
+export OPENOCD_DBG_START_CMD ?= "-c reset halt"
 
 # Unwired Devices boards use openocd
 include $(RIOTMAKE)/tools/openocd.inc.mk
