@@ -28,6 +28,7 @@
  * @author      Vincent Dupont <vincent@otakeys.com>
  * @author      Oleg Artamonov <oleg@unwds.com>
  * @author      Francisco Molina <francisco.molina@inria.cl>
+ * @author      Alexander Podshivalov <a_podshivalov@mail.ru>
  *
  * @}
  */
@@ -86,6 +87,10 @@ static void jump_to_bootloader(void) {
 }
 #endif
 
+#ifndef DISABLE_JTAG
+#define DISABLE_JTAG 0
+#endif
+
 #if defined(CPU_FAM_STM32F0) || defined(CPU_FAM_STM32F1) || \
     defined(CPU_FAM_STM32F2) || defined(CPU_FAM_STM32F3) || \
     defined(CPU_FAM_STM32F4) || defined(CPU_FAM_STM32F7)
@@ -105,10 +110,6 @@ static void jump_to_bootloader(void) {
 #define GPIO_CLK              (APB2)
 #define GPIO_CLK_ENR          (RCC->APB2ENR)
 #define GPIO_CLK_ENR_MASK     (0x000001FC)
-#endif
-
-#ifndef DISABLE_JTAG
-#define DISABLE_JTAG 0
 #endif
 
 /**
@@ -216,7 +217,22 @@ void cpu_init(void)
     for (i = 0; i < 8; i++) {
         port = (GPIO_TypeDef *)(GPIOA_BASE + i*(GPIOB_BASE - GPIOA_BASE));
         if (cpu_check_address((char *)port)) {
-            port->MODER = 0xffffffff;
+            if (!DISABLE_JTAG) {
+                switch (i) {
+                    /* preserve JTAG pins on PORTA and PORTB */
+                    case 0:
+                        port->MODER = 0xABFFFFFF;
+                        break;
+                    case 1:
+                        port->MODER = 0xFFFFFEBF;
+                        break;
+                    default:
+                        port->MODER = 0xFFFFFFFF;
+                        break;
+                }
+            } else {
+                port->MODER = 0xFFFFFFFF;
+            }
         } else {
             break;
         }
