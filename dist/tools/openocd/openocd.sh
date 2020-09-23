@@ -75,7 +75,7 @@
 : ${OPENOCD_ADAPTER_INIT:=}
 # The setsid command is needed so that Ctrl+C in GDB doesn't kill OpenOCD
 if [ -n "${MSYSTEM}" ]; then
-: ${SETSID:=}
+: ${SETSID:=start}
 else
 : ${SETSID:=setsid}
 fi
