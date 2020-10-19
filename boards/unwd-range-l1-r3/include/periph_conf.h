@@ -36,11 +36,11 @@ extern "C" {
 #define CLOCK_CORECLOCK     (32000000U)             /* targeted core clock frequency */
 /* configuration of PLL prescaler and multiply values */
 /* CORECLOCK := HSI / CLOCK_PLL_DIV * CLOCK_PLL_MUL */
-#define CLOCK_PLL_DIV       RCC_CFGR_PLLDIV2
-#define CLOCK_PLL_MUL       RCC_CFGR_PLLMUL4
+#define CLOCK_PLL_DIV       RCC_CFGR_PLLDIV3
+#define CLOCK_PLL_MUL       RCC_CFGR_PLLMUL6
 
-#define CLOCK_PLL_DIV_HSI   RCC_CFGR_PLLDIV2
-#define CLOCK_PLL_MUL_HSI   RCC_CFGR_PLLMUL4
+#define CLOCK_PLL_DIV_HSI   RCC_CFGR_PLLDIV3
+#define CLOCK_PLL_MUL_HSI   RCC_CFGR_PLLMUL6
 
 #define CLOCK_PLL_DIV_HSE   RCC_CFGR_PLLDIV3
 #define CLOCK_PLL_MUL_HSE   RCC_CFGR_PLLMUL4
