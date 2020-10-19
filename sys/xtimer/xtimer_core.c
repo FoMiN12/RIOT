@@ -157,8 +157,9 @@ void _xtimer_set(xtimer_t *timer, uint32_t offset)
 static void _periph_timer_callback(void *arg, int chan)
 {
     (void)arg;
-    (void)chan;
-    _timer_callback();
+    if(chan == XTIMER_CHAN){
+        _timer_callback();
+    }
 }
 
 static void _shoot(xtimer_t *timer)
