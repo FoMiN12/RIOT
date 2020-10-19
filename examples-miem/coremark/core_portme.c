@@ -20,7 +20,6 @@ Original Author: Shay Gal-on
 #include <stdlib.h>
 #include "coremark.h"
 
-#include <xtimer.h>
 #include <lptimer.h>
 
 #if VALIDATION_RUN
