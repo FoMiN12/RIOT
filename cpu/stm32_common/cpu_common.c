@@ -101,6 +101,37 @@ uint32_t periph_apb_clk(uint8_t bus)
         /* return CLOCK_APB2; */
     }
 #endif
+
+    switch (CLOCK_AHB_DIV) {
+        case RCC_CFGR_HPRE_DIV1: 
+            divider *= 1;
+            break;
+        case RCC_CFGR_HPRE_DIV2: 
+            divider *= 2;
+            break;
+        case RCC_CFGR_HPRE_DIV4: 
+            divider *= 4;
+            break;
+        case RCC_CFGR_HPRE_DIV8: 
+            divider *= 8;
+            break;
+        case RCC_CFGR_HPRE_DIV16: 
+            divider *= 16;
+            break;
+        case RCC_CFGR_HPRE_DIV64: 
+            divider *= 64;
+            break;
+        case RCC_CFGR_HPRE_DIV128: 
+            divider *= 128;
+            break;
+        case RCC_CFGR_HPRE_DIV256: 
+            divider *= 256;
+            break;
+        case RCC_CFGR_HPRE_DIV512: 
+            divider *= 512;
+            break;
+    }
+
     return cpu_status.clock.coreclock/divider;
 }
 

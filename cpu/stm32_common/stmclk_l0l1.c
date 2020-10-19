@@ -88,6 +88,30 @@
     #define CORE_VOLTAGE (PWR_CR_VOS_1 | PWR_CR_VOS_0)
 #endif
 
+//*****************************************************************************
+//
+//! Provides a small delay.
+//!
+//! \param ulCount is the number of delay loop iterations to perform.
+//!
+//! This function provides a means of generating a constant length delay.  It
+//! is written in assembly to keep the delay consistent across tool chains,
+//! avoiding the need to tune the delay based on the tool chain in use.
+//!
+//! The loop takes 3 cycles/loop.
+//!
+//! \return None.
+//
+//*****************************************************************************
+static void __attribute__((naked))
+utils_delay(unsigned long count)
+{
+    (void)count;
+    __asm("    subs    r0, #1\n"
+          "    bne     utils_delay\n"
+          "    bx      lr");
+}
+
 static volatile uint32_t clock_source_rdy = 0;
 
 /**
@@ -109,7 +133,7 @@ static volatile uint32_t clock_source_rdy = 0;
  */
 void stmclk_init_sysclk(void)
 {
-    uint32_t tmpreg;
+    volatile uint32_t tmpreg;
     
     /* Reset the RCC clock configuration to the default reset state(for debug purpose) */
     /* Set MSION bit */
@@ -203,17 +227,38 @@ void stmclk_init_sysclk(void)
     }
 #endif
 
-    /* set AHB, APB1 and APB2 clock dividers */
-    tmpreg = RCC->CFGR;
-    tmpreg &= ~RCC_CFGR_HPRE;
-    tmpreg |= CLOCK_AHB_DIV;
-    tmpreg &= ~RCC_CFGR_PPRE1;
-    tmpreg |= CLOCK_APB1_DIV;
-    tmpreg &= ~RCC_CFGR_PPRE2;
-    tmpreg |= CLOCK_APB2_DIV;
-    RCC->CFGR = tmpreg;
-
 #if CLOCK_USE_PLL
+#if (CLOCK_CORECLOCK > 8000000U)
+    /* Switch MSI to 4.2 MHz, this means we can safely switch to ~16 MHz afterwards */
+    tmpreg = RCC->ICSCR;
+    tmpreg &= ~RCC_ICSCR_MSIRANGE;
+    tmpreg |= RCC_ICSCR_MSIRANGE_6;
+    RCC->ICSCR = tmpreg;
+    
+    /* wait 5 us, that is about 20 cycles */
+    utils_delay(20/3);
+    
+#if (CLOCK_CORECLOCK > 16000000U)
+    /* Switch to ~16 MHz from HSI, this alows to switch to any clock source later */
+    RCC->CR |= RCC_CR_HSION;
+    /*  PLL configuration: PLLCLK = CLOCK_SOURCE (16M) / PLL_DIV (3) * PLL_MUL (3) */
+    RCC->CFGR &= ~((uint32_t)(RCC_CFGR_PLLSRC | RCC_CFGR_PLLDIV | RCC_CFGR_PLLMUL));
+    RCC->CFGR |= (uint32_t)(RCC_CFGR_PLLSRC_HSI | RCC_CFGR_PLLDIV3 | RCC_CFGR_PLLMUL3);
+    /* Enable PLL */
+    RCC->CR |= RCC_CR_PLLON;
+    /* Wait till PLL is ready */
+    while ((RCC->CR & RCC_CR_PLLRDY) == 0) {}
+    
+    /* wait 5 us, that is about 80 cycles */
+    utils_delay(80/3);
+    
+    /* Disable PLL */
+    RCC->CR &= ~(RCC_CR_PLLON);
+    /* Wait till PLL is shut down */
+    while ((RCC->CR & RCC_CR_PLLRDY) != 0) {}
+#endif
+#endif
+
     /*  PLL configuration: PLLCLK = CLOCK_SOURCE / PLL_DIV * PLL_MUL */
     RCC->CFGR &= ~((uint32_t)(RCC_CFGR_PLLSRC | RCC_CFGR_PLLDIV | RCC_CFGR_PLLMUL));
     #if defined(CLOCK_HS_MULTI)
@@ -276,6 +321,16 @@ void stmclk_init_sysclk(void)
 #endif
     
     cpu_status.clock.coreclock = CLOCK_CORECLOCK;
+
+    /* set AHB, APB1 and APB2 clock dividers */
+    tmpreg = RCC->CFGR;
+    tmpreg &= ~RCC_CFGR_HPRE;
+    tmpreg |= CLOCK_AHB_DIV;
+    tmpreg &= ~RCC_CFGR_PPRE1;
+    tmpreg |= CLOCK_APB1_DIV;
+    tmpreg &= ~RCC_CFGR_PPRE2;
+    tmpreg |= CLOCK_APB2_DIV;
+    RCC->CFGR = tmpreg;
 
 #if defined(MODULE_PERIPH_STATUS_EXTENDED)
 #if CLOCK_MSI
