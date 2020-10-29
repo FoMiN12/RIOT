@@ -539,6 +539,27 @@ static void _update_bandwidth(const sx127x_t *dev)
     } else {
         config1_reg &= SX1276_RF_LORA_MODEMCONFIG1_BW_MASK;
         switch (dev->settings.lora.bandwidth) {
+        case LORA_BW_7_81_KHZ:
+            config1_reg |= SX1276_RF_LORA_MODEMCONFIG1_BW_7_81_KHZ;
+            break;
+        case LORA_BW_10_41_KHZ:
+            config1_reg |= SX1276_RF_LORA_MODEMCONFIG1_BW_10_41_KHZ;
+            break;
+        case LORA_BW_15_62_KHZ:
+            config1_reg |= SX1276_RF_LORA_MODEMCONFIG1_BW_15_62_KHZ;
+            break;
+        case LORA_BW_20_83_KHZ:
+            config1_reg |= SX1276_RF_LORA_MODEMCONFIG1_BW_20_83_KHZ;
+            break;
+        case LORA_BW_31_25_KHZ:
+            config1_reg |= SX1276_RF_LORA_MODEMCONFIG1_BW_31_25_KHZ;
+            break;
+        case LORA_BW_41_66_KHZ:
+            config1_reg |= SX1276_RF_LORA_MODEMCONFIG1_BW_41_66_KHZ;
+            break;
+        case LORA_BW_62_50_KHZ:
+            config1_reg |= SX1276_RF_LORA_MODEMCONFIG1_BW_62_50_KHZ;
+            break;
         case LORA_BW_125_KHZ:
             config1_reg |= SX1276_RF_LORA_MODEMCONFIG1_BW_125_KHZ;
             break;

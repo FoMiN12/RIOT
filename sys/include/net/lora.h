@@ -118,7 +118,14 @@ extern "C" {
 enum {
     LORA_BW_125_KHZ = 0,               /**< 125 kHz bandwidth */
     LORA_BW_250_KHZ,                   /**< 250 kHz bandwidth */
-    LORA_BW_500_KHZ                    /**< 500 kHz bandwidth */
+    LORA_BW_500_KHZ,                   /**< 500 kHz bandwidth */
+    LORA_BW_7_81_KHZ,                  /**< 7.81 kHz bandwidth */
+    LORA_BW_10_41_KHZ,                 /**< 10.41 kHz bandwidth */
+    LORA_BW_15_62_KHZ,                 /**< 15.62 kHz bandwidth */
+    LORA_BW_20_83_KHZ,                 /**< 20.83 kHz bandwidth */
+    LORA_BW_31_25_KHZ,                 /**< 31.25 kHz bandwidth */
+    LORA_BW_41_66_KHZ,                 /**< 41.66 kHz bandwidth */
+    LORA_BW_62_50_KHZ,                 /**< 62.5 kHz bandwidth */
 };
 
 /**
