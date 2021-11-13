@@ -99,6 +99,7 @@ size_t eeprom_erase(void)
 }
 
 #else
+#if defined(FLASHPAGE_SIZE)
 
 /* EEPROM emulation using flash */
 
@@ -244,6 +245,7 @@ size_t eeprom_set(uint32_t pos, uint8_t val, size_t len)
 {
     return _eeprom_operation(pos, &val, len, FLASH_EEPROM_SET);
 }
+#endif
 #endif
 #endif
 
