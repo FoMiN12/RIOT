@@ -95,6 +95,10 @@ int __attribute__((used)) sched_run(void)
           (kernel_pid_t)((active_thread == NULL) ? KERNEL_PID_UNDEF : active_thread->pid),
           next_thread->pid);
 
+    uint16_t data = ((next_thread->pid - 1) << 13) & 0xffff;
+    GPIOB->BSRR = (~(data) << 16) | data;
+    printf(" next thread: %" PRIkernel_pid "\n", next_thread->pid);
+
     if (active_thread == next_thread) {
         DEBUG("sched_run: done, sched_active_thread was not changed.\n");
         return 0;

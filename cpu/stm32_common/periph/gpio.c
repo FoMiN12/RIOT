@@ -338,6 +338,7 @@ int gpio_init_int(gpio_t pin, gpio_mode_t mode, gpio_flank_t flank,
 }
 void isr_exti(void)
 {
+    GPIOA->BSRR = GPIO_BSRR_BS_5; /* turn on LED using CMSIS; do not call HAL functions */
     /* only generate interrupts against lines which have their IMR set */
     uint32_t pending_isr = (EXTI->PR & EXTI->IMR);
     for (size_t i = 0; i < EXTI_NUMOF; i++) {
@@ -346,6 +347,7 @@ void isr_exti(void)
             isr_ctx[i].cb(isr_ctx[i].arg);
         }
     }
+    GPIOA->BSRR = GPIO_BSRR_BS_5; /* turn on LED using CMSIS; do not call HAL functions */
     cortexm_isr_end();
 }
 #endif /* MODULE_PERIPH_GPIO_IRQ */
