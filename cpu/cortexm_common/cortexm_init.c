@@ -144,8 +144,6 @@ bool cpu_check_address(volatile const char *address)
 
 void cortexm_init(void)
 {
-    cortexm_init_fpu();
-
     /* configure the vector table location to internal flash */
 #if defined(CPU_ARCH_CORTEX_M3) || defined(CPU_ARCH_CORTEX_M4) || \
     defined(CPU_ARCH_CORTEX_M4F) || defined(CPU_ARCH_CORTEX_M7) || \
