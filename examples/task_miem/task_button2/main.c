@@ -30,15 +30,15 @@
 
 int main(void)
 {
-    ztimer_now(ZTIMER_MSEC);
+    // ztimer_now(ZTIMER_MSEC);
     gpio_init(GPIO_PIN(PORT_A, 6), GPIO_OUT);
     gpio_init(GPIO_PIN(PORT_A, 7), GPIO_IN);
-    bool bPushed = false; 
-    uint32_t k = ztimer_now(ZTIMER_MSEC);
-    printf(k);
+    gpio_write(GPIO_PIN(PORT_A, 6), 12);
+    bool bPushed = false;
+    
     while (1)
     {
-        if ((bPushed == false) && (gpio_read(GPIO_PIN(PORT_A, 7)) != 0))
+        if ((bPushed == false) && (gpio_read(GPIO_PIN(PORT_A, 7)) == 128))
         {
             gpio_toggle(GPIO_PIN(PORT_A, 6));
             bPushed = true;
@@ -46,7 +46,7 @@ int main(void)
         {
             bPushed = false;
         }
-    }
 
+    }
     return 0;
 }
