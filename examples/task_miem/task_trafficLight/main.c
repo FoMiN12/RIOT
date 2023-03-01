@@ -77,9 +77,9 @@ int main(void)
     while (1)
     {
         curTime = currentTime();
-        printf("led green: %i led yellow: %i\n", (int)gpio_read(LED_AUTO_GREEN), (int)gpio_read(LED_AUTO_YELLOW));
+        // printf("led button: %i led yellow: %i\n", gpio_read(BUTTON_USER), (int)gpio_read(LED_AUTO_YELLOW));
         if (!isChangingSoon) {
-            if ((isAutoGreen && (gpio_read(BUTTON_USER) || (curTime - lastTrafficChangingTime > autoGreenTime)))  
+            if ((isAutoGreen && (!gpio_read(BUTTON_USER) || (curTime - lastTrafficChangingTime > autoGreenTime)))  
               || (!isAutoGreen && (curTime - lastTrafficChangingTime > autoRedTime))) 
             {
                 changingStartTime = curTime;
