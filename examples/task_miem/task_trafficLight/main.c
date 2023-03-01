@@ -85,12 +85,15 @@ int main(void)
                 changingStartTime = curTime;
                 isChangingSoon = true;
                 gpio_write(LED_AUTO_YELLOW, 12);
+                if (isAutoGreen) {
+                    gpio_write(LED_AUTO_GREEN, 0);
+                }
                 // printf("%i\n", (int)gpio_read(LED_AUTO_YELLOW));
             }
         } else {
             if (curTime - changingStartTime > changingTime) {
                 if (isAutoGreen) { 
-                    gpio_write(LED_AUTO_GREEN, 0);
+                    
                     gpio_write(LED_AUTO_RED, 12);
                     
                     gpio_write(LED_USER_GREEN, 12);
@@ -103,7 +106,6 @@ int main(void)
                     gpio_write(LED_USER_RED, 12);
                 }
                 gpio_write(LED_AUTO_YELLOW, 0);
-                
 
                 isAutoGreen = !isAutoGreen;
                 isChangingSoon = false;
