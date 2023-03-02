@@ -67,6 +67,7 @@ int main(void)
     uint32_t autoGreenTime = 14000;
     uint32_t autoRedTime = 8000;
     uint32_t changingTime = 4000;
+    uint32_t stableTrafficTime = 6000;
     
     bool isAutoGreen = true;
     bool isChangingSoon = false;
@@ -79,7 +80,7 @@ int main(void)
         curTime = currentTime();
         // printf("led button: %i led yellow: %i\n", gpio_read(BUTTON_USER), (int)gpio_read(LED_AUTO_YELLOW));
         if (!isChangingSoon) {
-            if ((isAutoGreen && (!gpio_read(BUTTON_USER) || (curTime - lastTrafficChangingTime > autoGreenTime)))  
+            if ((isAutoGreen && (curTime - lastTrafficChangingTime > stableTrafficTime) && (!gpio_read(BUTTON_USER) || (curTime - lastTrafficChangingTime > autoGreenTime)))  
               || (!isAutoGreen && (curTime - lastTrafficChangingTime > autoRedTime))) 
             {
                 changingStartTime = curTime;
