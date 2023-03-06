@@ -31,9 +31,9 @@
 int main(void)
 {
     // ztimer_now(ZTIMER_MSEC);
-    gpio_init(GPIO_PIN(PORT_A, 6), GPIO_OUT);
-    gpio_init(GPIO_PIN(PORT_A, 7), GPIO_IN);
-    gpio_write(GPIO_PIN(PORT_A, 6), 0);
+    gpio_init(GPIO_PIN(PORT_A, 5), GPIO_OUT);
+    gpio_init(GPIO_PIN(PORT_C, 13), GPIO_IN);
+    gpio_write(GPIO_PIN(PORT_A, 5), 0);
     bool bPushed = false;
     bool ledOn = false;
     short i = 0;
@@ -41,13 +41,13 @@ int main(void)
     uint32_t j = 4000000000;
     while (1)
     {
-        if ((bPushed == false) && (gpio_read(GPIO_PIN(PORT_A, 7)) == 128))
+        if ((bPushed == false) && (gpio_read(GPIO_PIN(PORT_C, 13)) == 0))
         {
             bPushed = true;
             j = ztimer_now(ZTIMER_USEC)/1000;
             k = ztimer_now(ZTIMER_USEC)/1000;
         } 
-        else if ((bPushed == true) && (gpio_read(GPIO_PIN(PORT_A, 7)) == 0))
+        else if ((bPushed == true) && (gpio_read(GPIO_PIN(PORT_C, 13)) != 0))
         {
             bPushed = false;
             if ((ztimer_now(ZTIMER_USEC)/1000 - j) < 999)
@@ -84,7 +84,7 @@ int main(void)
             {
                 if ((ztimer_now(ZTIMER_USEC)/1000 - k) > 499)
                 {
-                    gpio_toggle(GPIO_PIN(PORT_A, 6));
+                    gpio_toggle(GPIO_PIN(PORT_A, 5));
                     k = ztimer_now(ZTIMER_USEC)/1000;
                 }
             }
@@ -92,7 +92,7 @@ int main(void)
             {
                 if ((ztimer_now(ZTIMER_USEC)/1000 - k) > 999)
                 {
-                    gpio_toggle(GPIO_PIN(PORT_A, 6));
+                    gpio_toggle(GPIO_PIN(PORT_A, 5));
                     k = ztimer_now(ZTIMER_USEC)/1000;
                 }
             }
@@ -100,14 +100,14 @@ int main(void)
             {
                 if ((ztimer_now(ZTIMER_USEC)/1000 - k) > 1999)
                 {
-                    gpio_toggle(GPIO_PIN(PORT_A, 6));
+                    gpio_toggle(GPIO_PIN(PORT_A, 5));
                     k = ztimer_now(ZTIMER_USEC)/1000;
                 }
             }
         }
         else
         {
-            gpio_write(GPIO_PIN(PORT_A, 6), 0);
+            gpio_write(GPIO_PIN(PORT_A, 5), 0);
         }
 
     }
