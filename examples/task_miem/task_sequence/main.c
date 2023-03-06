@@ -48,17 +48,14 @@ int main(void)
     gpio_init(BUTTON_3, GPIO_IN);
     gpio_init(LED_PIN, GPIO_OUT);
 
-    int clickCount = 0;
-    int buttonSequence[4] = {0,0,0,0};
-    int password[4] = {1, 2, 3, 3};
+    short clickCount = 0;
+    short buttonSequence[4] = {0,0,0,0};
+    short password[4] = {1, 2, 3, 3};
 
     uint32_t timePush = 0;
     
     bool bPushed = false;
-
-    
-    
-
+    bool timeFlag = false;
 
     while (1)
     {
@@ -68,60 +65,54 @@ int main(void)
             timePush = currentTime();
         }
        // printf("%i", (unsigned long int) (timePush - currentTime()));
-        if (clickCount < 4) {
-            if (gpio_read(BUTTON_1) != 0) {
-                bPushed = true;
-                if (currentTime() - timePush > 2000) {
-                    buttonSequence[clickCount] = 1;
-                    clickCount++;
-                }
-                // printf("%i", clickCount);
-            } else if (gpio_read(BUTTON_2) != 0) {
-                bPushed = true;
-                if (currentTime() - timePush > 2000) {
-                    buttonSequence[clickCount] = 2;
-                    clickCount++;
-                }
-                // printf("%i", clickCount);
-            } else if (gpio_read(BUTTON_3) != 0) {
-                bPushed = true;
-                if (currentTime() - timePush > 2000) {
-                    buttonSequence[clickCount] = 3;
-                    clickCount++;
-                }
-                // printf("%i", clickCount);
-            } 
-        }   else if (gpio_read(BUTTON_1) == 0 && gpio_read(BUTTON_2) == 0 && gpio_read(BUTTON_3) == 0) {
+        if (gpio_read(BUTTON_1) == 0 && gpio_read(BUTTON_2) == 0 && gpio_read(BUTTON_3) == 0) 
+        {
+
             bPushed = false;
-        } else if (clickCount == 4) { 
-            if (clickCount == 3 && buttonSequence[0] == password[0] && buttonSequence[1] == password[1]
+            timeFlag = false;
+
+        }
+        else if (clickCount == 4) { 
+            if (buttonSequence[0] == password[0] && buttonSequence[1] == password[1]
                 && buttonSequence[2] == password[2] && buttonSequence[3] == password[3]) {
                     gpio_toggle(LED_PIN); 
                 }
+            printf("%d\n%d\n%d\n%d\n\n", buttonSequence[0], buttonSequence[1],
+            buttonSequence[2], buttonSequence[3]);
             buttonSequence[0] = 0;
             buttonSequence[1] = 0;
             buttonSequence[2] = 0;
             buttonSequence[3] = 0;
             clickCount = 0;
-            printf("%i\n", clickCount);
-        }
-        // printf("led button: %i led yellow: %i\n", gpio_read(BUTTON_USER), (int)gpio_read(LED_AUTO_YELLOW));
-        
-        // else if (!isAutoGreen && (curTime - lastTrafficChangingTime > autoRedTime)) {
-        //     isChangingSoon = true;
-        //     changingStartTime = curTime;
-        //     gpio_write(LED_AUTO_YELLOW, 12);
-        // }
-        // if ((bPushed == false) && (gpio_read(GPIO_PIN(PORT_C, 13)) != 0))
-        // {
-        //     gpio_toggle(GPIO_PIN(PORT_B, 6));
-        //     bPushed = true;
-        // } else if ((bPushed == true) && (gpio_read(GPIO_PIN(PORT_C, 13)) == 0))
-        // {
-        //     bPushed = false;
-        // }
-        // printf("%i\n", (int) gpio_read(GPIO_PIN(PORT_C, 13)));
+            //printf("%i\n", clickCount);
 
+        } else if (clickCount < 4) {
+            if (gpio_read(BUTTON_1) != 0) {
+                bPushed = true;
+                if (currentTime() - timePush > 1000 && timeFlag == false) {
+                    buttonSequence[clickCount] = 1;
+                    timeFlag = true;
+                    clickCount++;
+                }
+                // printf("%i", clickCount);
+            } else if (gpio_read(BUTTON_2) != 0) {
+                bPushed = true;
+                if (currentTime() - timePush > 1000 && timeFlag == false) {
+                    buttonSequence[clickCount] = 2;
+                    timeFlag = true;
+                    clickCount++;
+                }
+                // printf("%i", clickCount);
+            } else if (gpio_read(BUTTON_3) != 0) {
+                bPushed = true;
+                if (currentTime() - timePush > 1000 && timeFlag == false) {
+                    buttonSequence[clickCount] = 3;
+                    timeFlag = true;
+                    clickCount++;
+                }
+                // printf("%i", clickCount);
+            } 
+        }
     }
     return 0;
 }
