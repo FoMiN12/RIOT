@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "irq.h": "c",
+        "cpu_conf.h": "c",
+        "gpio_ll_irq.h": "c",
+        "ztimer.h": "c"
+    }
+}
