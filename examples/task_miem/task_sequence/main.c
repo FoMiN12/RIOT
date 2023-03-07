@@ -31,9 +31,9 @@
 
 // #define BUTTON_USER (GPIO_PIN(PORT_C, 13)) // button
 
-#define BUTTON_1 (GPIO_PIN(PORT_A, 9)) // D8
-#define BUTTON_2 (GPIO_PIN(PORT_C, 7)) // D9
-#define BUTTON_3 (GPIO_PIN(PORT_B, 6)) // D10
+#define BUTTON_1 (GPIO_PIN(PORT_B, 0)) // A3
+#define BUTTON_2 (GPIO_PIN(PORT_C, 1)) // A4
+#define BUTTON_3 (GPIO_PIN(PORT_C, 0)) // A5
 
 #define LED_PIN (GPIO_PIN(PORT_A, 5)) // D13
 
@@ -89,7 +89,7 @@ int main(void)
         } else if (clickCount < 4) {
             if (gpio_read(BUTTON_1) != 0) {
                 bPushed = true;
-                if (currentTime() - timePush > 1000 && timeFlag == false) {
+                if (currentTime() - timePush > 2000 && timeFlag == false) {
                     buttonSequence[clickCount] = 1;
                     timeFlag = true;
                     clickCount++;
@@ -97,7 +97,7 @@ int main(void)
                 // printf("%i", clickCount);
             } else if (gpio_read(BUTTON_2) != 0) {
                 bPushed = true;
-                if (currentTime() - timePush > 1000 && timeFlag == false) {
+                if (currentTime() - timePush > 2000 && timeFlag == false) {
                     buttonSequence[clickCount] = 2;
                     timeFlag = true;
                     clickCount++;
@@ -105,7 +105,7 @@ int main(void)
                 // printf("%i", clickCount);
             } else if (gpio_read(BUTTON_3) != 0) {
                 bPushed = true;
-                if (currentTime() - timePush > 1000 && timeFlag == false) {
+                if (currentTime() - timePush > 2000 && timeFlag == false) {
                     buttonSequence[clickCount] = 3;
                     timeFlag = true;
                     clickCount++;
